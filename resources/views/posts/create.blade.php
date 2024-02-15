@@ -1,5 +1,5 @@
 @extends('layouts.app')
- @section('title','Form Create User')
+ @section('title','Form Create post')
 <body>
 
     @section('content')
