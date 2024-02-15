@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Users;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -12,7 +12,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = Users::all();
+        $users = User::withCount('posts')->paginate(10);
         return view('users.index',['users'=>$users]);
     }
 
@@ -29,7 +29,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        Users::create([
+        User::create([
             'name'=>$request->input('username'),
             'email'=>$request->input('email')
         ]);
@@ -42,8 +42,11 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        $user = Users::find($id);
-        return view('users.show', ['user'=>$user]);
+        $user = User::find($id);
+        $posts = User::find($id)->posts;
+
+
+        return view('users.show', ['user'=>$user,'posts'=>$posts]);
     }
 
     /**
@@ -51,7 +54,7 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        $user = Users::find($id);
+        $user = User::find($id);
     return view('users.edit',['user'=>$user]);
     }
 
@@ -60,7 +63,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = Users::find($id);
+        $user = User::find($id);
 
         $user->name = $request->input('name');
         $user->email = $request->input('email');
@@ -73,7 +76,7 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        $user=Users::where('id',$id)->delete();
+        $user=User::where('id',$id)->delete();
     return redirect()->route('users.index');
     }
 }

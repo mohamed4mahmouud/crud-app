@@ -18,6 +18,15 @@
             <li><a class="dropdown-item" href="{{ route('users.create') }}">New User</a></li>
           </ul>
         </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+           Posts
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{{ route('posts.create') }}" >Create Post</a></li>
+            <li><a class="dropdown-item" href="{{ route('posts.index') }}">All posts</a></li>
+          </ul>
+        </li>
       </ul>
     </div>
   </div>

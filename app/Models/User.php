@@ -23,6 +23,10 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function posts(){
+        return $this->hasMany('App\Models\Post');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

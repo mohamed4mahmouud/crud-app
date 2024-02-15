@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,8 @@ Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.de
 Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit')->where('id', '[0-9]+');;
 Route::get('/users/{id}/show',[UserController::class, 'show'])->name('users.show')->where('id', '[0-9]+');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+
+Route::resource('posts',PostController::class);
 
 Route::fallback(function(){
     return "can't find this route";

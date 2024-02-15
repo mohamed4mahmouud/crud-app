@@ -10,6 +10,7 @@
                     <th scope="col">Id</th>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
+                    <th scope="col">Posts Counts</th>
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
@@ -19,6 +20,7 @@
                     <td>{{ $user->id }}</td>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
+                    <td>{{ $user->posts_count }} posts</td>
                     <td>
                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                         <form method="POST" action="{{ route('users.destroy', ['id' => $user->id]) }}">
