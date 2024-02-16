@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.main')
 @section('title','Home')
 <body>
 
@@ -23,13 +23,17 @@
                     <td>{{ $user->posts_count }} posts</td>
                     <td>
                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                        <form method="POST" action="{{ route('users.destroy', ['id' => $user->id]) }}">
+                        @auth
+                        @if($user->id == Auth::id())
+                        <form method="POST" action="{{ route('users.destroy', ['user' => $user->id]) }}">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger m-2">Delete</button>
                         </form>
-                        <a href="{{ route('users.show', ['id'=> $user->id]) }}" ><button class="btn btn-success m-2">Show</button></a>
                         <a href="{{ route('users.edit', ['user' => $user->id]) }}" ><button class="btn btn-primary m-2">Edit</button></a>
+                        @endif
+                        @endauth
+                        <a href="{{ route('users.show', ['user'=> $user->id]) }}" ><button class="btn btn-success m-2">Show</button></a>
                     </div>
                     </td>
                 </tr>

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.main')
  @section('title','Form Create post')
 <body>
 
@@ -24,12 +24,6 @@
         <div class="alert alert-danger">{{ $message }}</div>
     @enderror
 
-    <select class="form-select form-select-lg mb-3" aria-label="Large select example" name="user_id">
-        <option selected>Select User</option>
-        @foreach($users as $user)
-            <option value="{{ $user->id }}">{{ $user->name }}</option>
-        @endforeach
-    </select>
         <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 

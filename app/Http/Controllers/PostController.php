@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
-use App\Models\Users;
+use App\Models\User;
 use App\Http\Requests\StoreBlogPost;
+use App\Events\PostCreated;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -24,8 +26,7 @@ class PostController extends Controller
     public function create()
     {
         //
-        $users = Users::all();
-        return view('posts.create',['users'=>$users]);
+        return view('posts.create');
     }
 
     /**
@@ -33,12 +34,17 @@ class PostController extends Controller
      */
     public function store(StoreBlogPost $request)
     {
-        //
-        $post = $request->all();
-        Post::create($post);
+        $post = new Post();
+        $post->title = $request->title;
+        $post->body = $request->body;
+        $post->user_id = Auth::id();
+        $post->save();
+
+        event(new PostCreated($post));
 
         return redirect()->route('posts.index');
     }
+
 
     /**
      * Display the specified resource.
@@ -65,6 +71,9 @@ class PostController extends Controller
     {
         //
         $post = Post::find($id);
+        if($post->user_id !== Auth::id()){
+            abort(403,'Unauthorized action.');
+        }
 
         $post->title = $request->input('title');
         $post->body = $request->input('body');
@@ -80,7 +89,13 @@ class PostController extends Controller
     public function destroy(string $id)
     {
         //
-        $user=Post::where('id',$id)->delete();
+
+        $post=Post::find($id);
+        if($post->user_id !== Auth::id()){
+            abort(403,'Unauthorized action.');
+        }
+
+        $post->delete();
         return redirect()->route('posts.index');
     }
 }

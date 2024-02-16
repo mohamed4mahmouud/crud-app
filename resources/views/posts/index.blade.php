@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.main')
 @section('title','Posts')
 
 @section('content')
@@ -22,12 +22,16 @@
                 <td>{{ $post->user->name }}</td>
                 <td>
                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                    @auth
+                        @if ($post->user_id === auth()->id())
                     <form method="POST" action="{{ route('posts.destroy', ['post' => $post->id]) }}">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger m-2">Delete</button>
                         </form>
                         <a href="{{ route('posts.edit', ['post' => $post->id]) }}"><button class="btn btn-primary m-2">Edit</button></a>
+                        @endif
+                        @endauth
                     </div>
                 </td>
             </tr>

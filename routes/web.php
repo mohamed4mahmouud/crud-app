@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,19 +15,26 @@ use App\Http\Controllers\PostController;
 |
 */
 
-Route::get('/', [UserController::class, 'index'])->name('users.index');
-Route::get('/create', [UserController::class, 'create'])->name('users.create');
-Route::post('/store', [UserController::class, 'store'])->name('users.store');
-Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
-Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit')->where('id', '[0-9]+');;
-Route::get('/users/{id}/show',[UserController::class, 'show'])->name('users.show')->where('id', '[0-9]+');
-Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+Route::get('/', function () {
+    return view('welcome');
+});
 
-Route::resource('posts',PostController::class);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::resource('users',UserController::class)->middleware('auth');
+
+Route::resource('posts',PostController::class)->middleware('auth');
 
 Route::fallback(function(){
     return "can't find this route";
 });
 
-
-
+require __DIR__.'/auth.php';
